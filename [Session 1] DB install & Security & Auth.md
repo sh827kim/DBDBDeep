@@ -161,13 +161,13 @@ CREATE 구문을 통해 부여할 수 있는 속성은 아래와 같습니다.
 
 | 구분                                   | 설명                                                         | ALTER |
 | -------------------------------------- | ------------------------------------------------------------ | ----- |
-| `SUPERUSER` |`NOSUPERUSER`(default)    | 슈퍼 유저인지                                                |
-| `CREATEDB`|`NOCREATEDB`(default)       | 데이터 베이스를 생성하는 역할인지                            |
-| `CREATEROLE`|`NOCREATEROLE`(default)   | 새 역할을 생성하는 역할인지                                  |
-| `INHERIT`(default)|`NOINHERIT`         | 다른 role이 해당 role의 권한을 자동 상속하게 할 건지         |
-| `LOGIN`|`NOLOGIN`(default)             | 로그인 가능한 역할인지                                       |
-| `REPLICATION`|`NOREPLICATION`(default) | 복제 역할인지 (replication 서버 관련)                        |
-| `BYPASSRLS`|`NOBYPASSRLS`(default)     | RLS 정책을 우회하는지에 대한 여부                            |
+| `SUPERUSER`  <br>`NOSUPERUSER`(default) |슈퍼 유저인지    | O                                               |
+| `CREATEDB` <br>`NOCREATEDB`(default) |데이터 베이스를 생성하는 역할인지       | O                            |
+| `CREATEROLE` <br>`NOCREATEROLE`(default) |새 역할을 생성하는 역할인지   | O     |
+| `INHERIT`(default) <br>`NOINHERIT` |다른 role이 해당 role의 권한을 자동 상속하게 할 건지         | O         |
+| `LOGIN`<br>`NOLOGIN`(default) |로그인 가능한 역할인지             | O                                       |
+| `REPLICATION`<br>`NOREPLICATION`(default) |복제 역할인지 (replication 서버 관련) | O                        |
+| `BYPASSRLS`<br>`NOBYPASSRLS`(default) |RLS 정책을 우회하는지에 대한 여부     | O                            |
 | `CONNECTION LIMIT`                     | 역할이 만들 수 있는 동시 연결 세션 제한 수 (기본값: 제한없음 (-1)) | O     |
 | [`ENCRYPTED`]`PASSWORD` 'password'     | 역할의 암호를 설정                                           | O     |
 | `VALID UNTIL` 'timestamp'              | 암호 유효성 만료 날짜 지정 (기본값: 만료 없음)               | O     |
