@@ -17,23 +17,20 @@ DB의 변경 이전 상태를 보관해놓은 형태를 백업이라 합니다.
 
 - 시스템 종료 여부에 따른 종류
 
-<img src="./images/backup-1.png" alt="backup-1" style="zoom:100%;" align="left"/>
+<img src="./images/backup-1.png" alt="backup-1" style="zoom:100%;"/>
 
 
 
 - 백업 범위에 따른 종류
-  - **Full Backup** : 데이터 변경 유무와 관계 없이 전체 데이터를 백업하는 방식. 복구가 간편하나, 백업 시간이 많이 소요됨.
-  - <img src="./images/fullbackup.png" alt="fullbackup" style="zoom:100%;" align="left" />
-  - **Differential Backup** : 마지막 전체 백업 이후의 변경된 모든 데이터를 백업하는 방식. 복구시간이 증분 백업에 비해 적게 소요됨.
-  - <img src="./images/dffbackup.png" alt="dffbackup" style="zoom:100%;" align="left"/>
-  - **Incremental Backup** : 일정 시간마다 변경된 데이터만 백업하는 방식. 복구 시간은 타 방식에 비해 오래걸리지만, 백업이 빠름.
-  - <img src="./images/incbackup.png" alt="incbackup" style="zoom:100%;" align="left" />
+  - **Full Backup** : 데이터 변경 유무와 관계 없이 전체 데이터를 백업하는 방식. 복구가 간편하나, 백업 시간이 많이 소요됨.<img src="./images/fullbackup.png" alt="fullbackup" style="zoom:100%;"/>
+  - **Differential Backup** : 마지막 전체 백업 이후의 변경된 모든 데이터를 백업하는 방식. 복구시간이 증분 백업에 비해 적게 소요됨.<img src="./images/dffbackup.png" alt="dffbackup" style="zoom:100%;"/>
+  - **Incremental Backup** : 일정 시간마다 변경된 데이터만 백업하는 방식. 복구 시간은 타 방식에 비해 오래걸리지만, 백업이 빠름.<img src="./images/incbackup.png" alt="incbackup" style="zoom:100%;" />
 
 
 
 - 백업 방식에 따른 종류
 
-<img src="./images/backup-2.png" alt="backup-2" style="zoom:67%;" align="left" />
+<img src="./images/backup-2.png" alt="backup-2"  />
 
 
 
