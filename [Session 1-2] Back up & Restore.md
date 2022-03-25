@@ -45,7 +45,7 @@ DB의 변경 이전 상태를 보관해놓은 형태를 백업이라 합니다.
 ### SQL Dump
 
 - 백업을 하고자 하는 당시의 상태를 기준으로 데이터베이스를 다시 만드는 덤프 파일을 생성하는 방법
-- Warm Backup & Full backup & Logical Backup
+- Warm Backup(?) & Full backup & Logical Backup
 - PostgreSQL에서 제공하는 pg_dump 커맨드를 활용하여 덤프 파일을 생성할 수 있습니다.
 - pg_dump는 슈퍼유저여야만 실행이 가능합니다.
 
@@ -198,9 +198,21 @@ tar -cf backup.tar /var/lib/pgsql/14/data # initdb 시 별도의 data 폴더 위
 
 ### 지속적인 아카이빙 & Point-in-Time Recovery (PITR)
 
+**WAL (Write Ahead Logging) 이란**
+
+- DB에 가해지는 수정을 적용하기 전에 로그에 기록하는 것.
+- ACID 특성 중 원자성과 내구성을 보장하는 기술의 한 계열
+- redo, undo 정보가 둘 다 로그에 저장됨
+- 시스템이 다운되었다가 다시 복구되었을 때 WAL 로그 기반으로 현재까지의 작업과 해야할 작업을 분석하여 해야할 작업만 재진행.
 
 
 
+**WAL 기반 지속적 아카이빙**
+
+- PostgreSQL은 WAL을 활용하여 백업을 할 수 있게 지원함
+- Hot Backup & Incremental Backup & Physical Backup
+- WAL을 활용하기 위해서는 특정 시점의 file system 수준의 dump가 필요함.
 
 
 
+ 
