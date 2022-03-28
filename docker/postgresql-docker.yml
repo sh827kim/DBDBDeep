@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - "25432:5432"
+    volumes:
+      - /Users/kathy/dbdbdeep/mount/data:/var/lib/postgresql/data
+      - /Users/kathy/dbdbdeep/mount/init_schema:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: mytest1234
+      POSTGRES_DB: dvdrental
