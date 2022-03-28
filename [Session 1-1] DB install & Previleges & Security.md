@@ -135,26 +135,11 @@ logout
 docker start mycentos
 ```
 
-또는 docker-compose 를 이용하여 PC 부팅과 함께 docker를 띄우는 방법도 가능하겠습니다. 
-대신 위에서 실행하신 설치 절차를 다시 실행하셔야 합니다.
-아래 yaml 참조하셔서 docker-compose 실행하시면 되겠습니다. (검증이 안된 파일이라 오류가 있을 수는 있습니다.)
-
-```yaml
-version: '3.1'
-services:
-  centos:
-    image: centos:8
-    container_name: mycentos
-    privileged: true
-    restart: always
-    ports:
-      - "15432:5432"
-    entrypoint: /sbin/init
-```
-
 또는 아래와 같이 postgresql 도커 기반의 컴포즈 파일로 진행하셔도 무방합니다. 
 
 사전에 공유해드린  sql 파일을 init_schema 폴더에 추가하면 샘플스키마도 함께 create 되니 참조하시기 바랍니다.
+
+(link : https://github.com/sh827kim/DBDBDeep/tree/master/docker)
 
 단, 마운팅 할 위치를 적당히 수정해주시기 바랍니다.
 
