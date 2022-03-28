@@ -152,6 +152,29 @@ services:
     entrypoint: /sbin/init
 ```
 
+또는 아래와 같이 postgresql 도커 기반의 컴포즈 파일로 진행하셔도 무방합니다. 
+
+사전에 공유해드린  sql 파일을 init_schema 폴더에 추가하면 샘플스키마도 함께 create 되니 참조하시기 바랍니다.
+
+단, 마운팅 할 위치를 적당히 수정해주시기 바랍니다.
+
+```yaml
+version: '3.1'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - "25432:5432"
+    volumes:
+      - YOUR_DATA_DIR:/var/lib/postgresql/data
+      - YOUR_MOUNT_BASE_DIR/init_schema:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: mytest1234
+      POSTGRES_DB: dvdrental
+```
+
 
 
 ## 권한

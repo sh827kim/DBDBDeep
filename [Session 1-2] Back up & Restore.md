@@ -212,6 +212,25 @@ tar -cf backup.tar /var/lib/pgsql/14/data # initdb 시 별도의 data 폴더 위
 - PostgreSQL은 WAL을 활용하여 백업을 할 수 있게 지원함
 - Hot Backup & Incremental Backup & Physical Backup
 - WAL을 활용하기 위해서는 특정 시점의 file system 수준의 dump가 필요함.
+- file system backup과 마찬가지로 전체 데이터베이스 클러스터 복원만 지원 가능
+- 많은 아카이브 스토리지가 필요함
+- 각 WAL 세그먼트 파일은 기본 16MB (initdb시 세그먼트 크기 변경 가능) 
+- WAL 세그먼트 파일은 rolling 형태로 재활용 되므로, WAL 기반 아카이빙 활용 시 다 채워진 WAL 파일 내용을 캡처하고 어딘가에 저장해야 함.
+  - 저장 방식, 위치 등은 상관없으나, archive_command 옵션을 통해 저장 커맨드 작성이 필요함
+
+
+
+
+**WAL 기반 아카이빙을 위한 지정 필요 옵션**
+
+```properties
+wal_level = replica # 옵션이 replica 이상이어야 함. minimal, replica, logical
+archive_mode = on # off, on, always
+archive_command = 'test ! -f /mnt/server/archivedir/%f && cp %p /mnt/server/archivedir/%f' # 리눅스 예시 커맨드
+archive_timeout = 60 #아카이빙 주기 설정 1 = 1s. 보통 60초로 설정하는 것이 안정적임.
+```
+
+
 
 
 
