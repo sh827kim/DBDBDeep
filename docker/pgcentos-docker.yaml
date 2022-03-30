@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  pgcentos:
+    image: sh827kim/pgcentos:2
+    container_name: pgcentos
+    privileged: true
+    restart: always
+    ports:
+      - "15432:5432"
+    volumes:
+      - YOUR_DATA_DIR:/var/lib/pgsql/14
+      - YOUR_ARCHIVE_DIR:/mnt/server/archivedir
