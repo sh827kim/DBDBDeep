@@ -142,7 +142,7 @@ docker exec -it pgcentos bash /pg_initialize.sh
 ```yaml
 version: '3.1'
 services:
-  postgres:
+  mycentos:
     image: sh827kim/pgcentos:2
     container_name: mycentos
     privileged: true
