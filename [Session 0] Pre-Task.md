@@ -79,9 +79,9 @@ vi /var/lib/pgsql/14/data/pg_hba.conf
 # "local" is for Unix domain socket connections only
 local   all             all                                     peer
 # IPv4 local connections:
-host    all             all             0.0.0.0/0               md5
+host    all             all             0.0.0.0/0               scram-sha-256
 # IPv6 local connections:
-host    all             all             ::1/128                 md5
+host    all             all             ::1/128                 scram-sha-256
 ...
 ```
 
@@ -93,6 +93,7 @@ vi /var/lib/pgsql/14/data/postgresql.conf
 ...
 listen_addresses = '*'
 ...
+password_encryption = scram-sha-256
 ```
 
 4. postgresql을 실행하고, 문제 없는지 확인합니다.

@@ -77,9 +77,9 @@ vi /var/lib/pgsql/14/data/pg_hba.conf
 # "local" is for Unix domain socket connections only
 local   all             all                                     peer
 # IPv4 local connections:
-host    all             all             0.0.0.0/0               md5
+host    all             all             0.0.0.0/0               scram-sha-256
 # IPv6 local connections:
-host    all             all             ::1/128                 md5
+host    all             all             ::1/128                 scram-sha-256
 ...
 ```
 
@@ -87,15 +87,16 @@ host    all             all             ::1/128                 md5
 vi /var/lib/pgsql/14/data/postgresql.conf
 ```
 
-```
+```properties
 ...
 listen_addresses = '*'
 ...
+password_encryption = scram-sha-256
 ```
 
 4. postgresql을 실행하고, 문제 없는지 확인합니다.
 
-```shell
+```bash
 systemctl enable postgresql-14
 systemctl start postgresql-14
 systemctl status postgresql-14
@@ -155,7 +156,7 @@ services:
 
 
 
-또는 아래와 같이 postgresql 도커 기반의 컴포즈 파일로 진행하셔도 무방합니다. 
+또는 아래와 같이 postgresql 도커 기반의 컴포즈 파일로 진행하는 방법도 있습니다.
 
 사전에 공유해드린  sql 파일을 init_schema 폴더에 추가하면 샘플스키마도 함께 create 되니 참조하시기 바랍니다.
 
@@ -275,7 +276,7 @@ dnf install -y wget unzip
 ```bash
 su - postgres
 wget https://www.postgresqltutorial.com/wp-content/uploads/2019/05/dvdrental.zip
-unzip dvdrental
+unzip dvdrental.zip
 ```
 
 - create database

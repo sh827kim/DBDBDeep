@@ -359,6 +359,163 @@ data 디렉토리를 tar 파일 등으로 아카이브할 때 아래 파일들�
 
 #### [실습] 지속적인 아카이빙 & PITR 실습
 
+postgresql.conf를 아래와 같이 변경합니다.(postgres 계정)
+
+```properties
+wal_level = replica # 옵션이 replica 이상이어야 함. minimal, replica, logical
+archive_mode = on # off, on, always
+archive_command = 'test ! -f /mnt/server/archivedir/%f && cp %p /mnt/server/archivedir/%f' # 리눅스 예시 커맨드
+archive_timeout = 10 # 아카이빙 테스트를 위해 10초로 설정
+restore_command = 'cp /mnt/server/archivedir/%f "%p"' # 복구 커맨드 지정
+archive_cleanup_command = 'pg_archivecleanup /mnt/server/archivedir %r' # 오래된 아카이브 정리 커맨드 지정
+```
+
+서버를 재시작합니다.
+
+```bash
+# root 계정
+systemctl restart postgresql-14
+```
+
+백업 베이스 파일을 만듭니다.
+
+```bash
+# postgres 계정
+pg_basebackup -D /mnt/server/archivedir/backuptar -Ft -z -P
+```
+
+아래와 같이 actor 테이블에 데이터를 넣어줍니다. 
+
+```sql
+insert into actor (first_name, last_name, last_update) values ('Yeojeong', 'Yoon', now());
+insert into actor (first_name, last_name, last_update) values ('Hyesoo', 'Kim', now());
+insert into actor (first_name, last_name, last_update) values ('Taeri', 'Kim', now());
+insert into actor (first_name, last_name, last_update) values ('Seoyeon', 'Choi', now());
+insert into actor (first_name, last_name, last_update) values ('Jeongwon', 'Choi', now());
+insert into actor (first_name, last_name, last_update) values ('Sumi', 'Jeon', now());
+insert into actor (first_name, last_name, last_update) values ('Jeonghee', 'Lim', now());
+insert into actor (first_name, last_name, last_update) values ('Yeri', 'Han', now());
+insert into actor (first_name, last_name, last_update) values ('Jihye', 'Lee', now());
+insert into actor (first_name, last_name, last_update) values ('Joohyun', 'Ok', now());
+insert into actor (first_name, last_name, last_update) values ('Jiyeon', 'Park', now());
+insert into actor (first_name, last_name, last_update) values ('Sohee', 'Han', now());
+insert into actor (first_name, last_name, last_update) values ('Mido', 'Jeon', now());
+insert into actor (first_name, last_name, last_update) values ('Yejin', 'Son', now());
+insert into actor (first_name, last_name, last_update) values ('JeongAh', 'Yeom', now());
+insert into actor (first_name, last_name, last_update) values ('Dami', 'Kim', now());
+insert into actor (first_name, last_name, last_update) values ('Hyeyoon', 'Kim', now());
+insert into actor (first_name, last_name, last_update) values ('Sojin', 'Kim', now());
+insert into actor (first_name, last_name, last_update) values ('Hyeok', 'Kim', now());
+insert into actor (first_name, last_name, last_update) values ('Seyoung', 'Lee', now());
+insert into actor (first_name, last_name, last_update) values ('Jiyeong', 'Park', now());
+insert into actor (first_name, last_name, last_update) values ('Eunbin', 'Park', now());
+insert into actor (first_name, last_name, last_update) values ('Chaeyeon', 'Jeong', now());
+insert into actor (first_name, last_name, last_update) values ('Yoongyoung', 'Bae', now());
+insert into actor (first_name, last_name, last_update) values ('Hyunjoo', 'Paik', now());
+```
+
+현재 타임스탬프를 확인하고, 기록해둡니다.
+
+```sql
+select now();
+```
+
+아래 쿼리를 돌려서 60초 이후에 모든 actor들의 성을 Kim으로 바꿔줍니다.
+
+```sql
+select pg_sleep(60)
+update actor set last_name = 'Kim';
+```
+
+postgresql 서버를 다시 중지시킵니다.
+
+```bash
+# root 계정
+systemctl stop postgresql-14
+```
+
+data 디렉토리를 data.bak 에 복제한 후 data 디렉토리 하위에 있는 모든 파일을 삭제합니다.
+
+```bash
+# postgres 계정
+cd /var/lib/pgsql/14
+cp -r data data.bak
+cd data
+rm -rf *
+```
+
+베이스 백업본을 가져와 data 디렉토리 아래에 아카이브를 해제합니다.
+
+```bash
+# postgres 계정
+cp /mnt/server/archivedir/backuptar/base.tar.gz /var/lib/pgsql/14/data/
+tar -zxvf base.tar.gz
+```
+
+data.bak/pg_wal 폴더와 wal 아카이브본이 있는 폴더(mnt/server/archivedir/) 내의 파일 리스트를 비교하여 아카이브 되지 않은 WAL 들과 archive_status 폴더를 data/pg_wal/로 복제해줍니다.
+
+```bash
+# postgres 계정
+cd /var/lib/pgsql/14/data.bak/pg_wal
+cp $NOT_ARCHIVED$ /var/lib/pgsql/14/data/pg_wal/
+rm -rf /var/lib/pgsql/14/data/pg_wal/archive_status
+cp -r archive_status /var/lib/pgsql/14/data/pg_wal/
+.....
+```
+
+recovery.signal 파일을 생성합니다.
+
+```bash
+# postgres 계정
+cd /var/lib/pgsql/14/data
+cat > recovery.signal # 이후 ctrl + D
+```
+
+위에서 기록한 타임스탬프를 아래와 같이 postgresql.conf에 작성합니다. (예시는 2022-03-31-09:06:00 UTC로 작성)
+
+```properties
+recovery_target_time='2022-03-31 09:06:00 UTC'
+```
+
+postgreSQL을 다시 실행하고, journalctl -f 를 통해 성공적으로 복구가 되는지 확인합니다.
+
+```sql
+# root 계정
+systemctl start postgresql-14
+journalctl -f
+```
+
+![journalctl](./images/journalctl.png)
+
+성공적으로 복구가 된 것을 확인하면 아래 쿼리를 통해 총 actor가 225개가 맞는지, 또 last_name이 Kim으로 변경되어있던게 원상복구된건지 확인합니다.
+
+```bash
+# postgres 계정
+psql -d dvdrental
+dvdrental=# select count(last_name from actor;
+dvdrental=# select pg_wal_replay_resume();
+```
+
+```sql
+select count(last_name from actor;
+```
+
+원상복구가 확인된다면 아래와 같이 pg_wal_replay_resume() 실행을 하여 서버를 복구모드에서 운영모드로 바꾸어줍니다.
+
+```sql
+select pg_wal_replay_resume();
+```
+
+recovery.signal 파일이 자동 삭제 되었는지 확인해봅니다.
+
+```bash
+# postgres 계정
+cd /var/lib/pgsql/14/data/
+find recovery.signal
+```
+
+
+
 
 
 
