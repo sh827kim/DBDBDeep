@@ -229,7 +229,9 @@ CREATE 구문을 통해 부여할 수 있는 속성은 아래와 같습니다.
 
 
 
-###권한 - GRANT/REVOKE
+
+
+### 권한 - GRANT/REVOKE
 
 `GRANT`/`REVOKE`는 DCL로, Object 에 대한 권한을 부여/회수합니다.
 
