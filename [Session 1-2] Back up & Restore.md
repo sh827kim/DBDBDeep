@@ -423,7 +423,7 @@ select now();
 아래 쿼리를 돌려서 60초 이후에 모든 actor들의 성을 Kim으로 바꿔줍니다.
 
 ```sql
-select pg_sleep(60)
+select pg_sleep(60);
 update actor set last_name = 'Kim';
 ```
 
@@ -492,18 +492,14 @@ journalctl -f
 ```bash
 # postgres 계정
 psql -d dvdrental
-dvdrental=# select count(last_name from actor;
-dvdrental=# select pg_wal_replay_resume();
-```
-
-```sql
-select count(last_name from actor;
+dvdrental=# select count(1) from actor;
+dvdrental=# select count(last_name) as last_name_count, last_name from actor group by last_name;
 ```
 
 원상복구가 확인된다면 아래와 같이 pg_wal_replay_resume() 실행을 하여 서버를 복구모드에서 운영모드로 바꾸어줍니다.
 
 ```sql
-select pg_wal_replay_resume();
+dvdrental=# select pg_wal_replay_resume();
 ```
 
 recovery.signal 파일이 자동 삭제 되었는지 확인해봅니다.
@@ -513,10 +509,6 @@ recovery.signal 파일이 자동 삭제 되었는지 확인해봅니다.
 cd /var/lib/pgsql/14/data/
 find recovery.signal
 ```
-
-
-
-
 
 
 
