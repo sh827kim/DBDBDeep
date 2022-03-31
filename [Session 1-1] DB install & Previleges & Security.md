@@ -136,7 +136,7 @@ logout
 
 ```bash
 docker-compose -f pgcentos-docker.yaml up -d
-docker exec -it pgcentos bash /pg_initialize.sh
+docker exec -it mycentos bash /pg_initialize.sh
 ```
 
 ```yaml
