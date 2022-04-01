@@ -37,10 +37,10 @@ dnf install -y glibc-langpack-en
 localectl set-locale LANG=en_US.UTF-8
 ```
 
-5. 그 외 편의를 위해 sudo, net-tools를 깔아줍니다.
+5. 그 외 편의를 위해 sudo, net-tools, wget, unzip을 깔아줍니다.
 
 ```shell
-dnf install -y sudo net-tools
+dnf install -y sudo net-tools wget unzip
 ```
 
 
@@ -266,11 +266,10 @@ REVOKE *privilege* ON *Object* FROM *role*;
 
 실습에 앞서 테스트를 위한 샘플 스키마를 생성합니다.
 
-- wget, unzip 설치
+- docker 접속
 
 ```shell
 docker exec -it mycentos bash
-dnf install -y wget unzip
 ```
 
 - 샘플 스키마 다운로드 및 압축해제
