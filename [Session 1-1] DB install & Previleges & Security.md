@@ -69,6 +69,7 @@ sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
 4. 도커 밖에서도 DB 접근이 가능하도록 아래와 같이 네트워크 셋팅을 변경해줍니다.
 
 ```shell
+su - postgres
 vi /var/lib/pgsql/14/data/pg_hba.conf
 ```
 
@@ -97,6 +98,7 @@ password_encryption = scram-sha-256
 4. postgresql을 실행하고, 문제 없는지 확인합니다.
 
 ```bash
+logout
 systemctl enable postgresql-14
 systemctl start postgresql-14
 systemctl status postgresql-14
