@@ -8,8 +8,6 @@
 - DDL, DML문을 잘못 작성을 해서 변경 대상이 아니었던 정보를 업데이트 하거나 삭제를 했다면?
 - 누군가 악의적으로 접근해서 테이블을 다 날려버렸다면?
 
-
-
 DB의 변경 이전 상태를 보관해놓은 형태를 백업이라 합니다.
 
 
@@ -18,28 +16,38 @@ DB의 변경 이전 상태를 보관해놓은 형태를 백업이라 합니다.
 
 - 시스템 종료 여부에 따른 종류
 
-<img src="./images/backup-1.png" alt="backup-1" style="zoom:100%;"/>
-
-
-
-- 백업 범위에 따른 종류
-  - **Full Backup** : 데이터 변경 유무와 관계 없이 전체 데이터를 백업하는 방식. 복구가 간편하나, 백업 시간이 많이 소요됨.<img src="./images/fullbackup.png" alt="fullbackup" style="zoom:100%;"/>
-  - **Differential Backup** : 마지막 전체 백업 이후의 변경된 모든 데이터를 백업하는 방식. 복구시간이 증분 백업에 비해 적게 소요됨.<img src="./images/dffbackup.png" alt="dffbackup" style="zoom:100%;"/>
-  - **Incremental Backup** : 일정 시간마다 변경된 데이터만 백업하는 방식. 복구 시간은 타 방식에 비해 오래걸리지만, 백업이 빠름.<img src="./images/incbackup.png" alt="incbackup" style="zoom:100%;" />
-
-
+<img src="./images/backup-1.png" alt="backup-1" style="zoom:100%;" align="left"/>
 
 - 백업 방식에 따른 종류
 
 <img src="./images/backup-2.png" alt="backup-2"  />
 
-
-
 - 백업본 보관 공간에 따른 종류
 
 ![backup-3](./images/backup-3.png)
 
+<div style="page-break-after: always; break-after: page;"></div>
 
+- 백업 범위에 따른 종류
+  - **Full Backup** : 데이터 변경 유무와 관계 없이 전체 데이터를 백업하는 방식. 복구가 간편하나, 백업 시간이 많이 소요됨.
+  
+    
+  
+    <img src="./images/fullbackup.png" alt="fullbackup" style="zoom:80%;" align="left"/>
+  
+  - **Differential Backup** : 마지막 전체 백업 이후의 변경된 모든 데이터를 백업하는 방식. 복구시간이 증분 백업에 비해 적게 소요됨.
+  
+    
+  
+    <img src="./images/dffbackup.png" alt="dffbackup" style="zoom:80%;"  align="left"/>
+  
+  - **Incremental Backup** : 일정 시간마다 변경된 데이터만 백업하는 방식. 복구 시간은 타 방식에 비해 오래걸리지만, 백업이 빠름.
+  
+    
+  
+    <img src="./images/incbackup.png" alt="incbackup" style="zoom:80%;"  align="left"/>
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## PostgreSQL이 지원하는 백업 방법
 
@@ -78,7 +86,7 @@ pg_dump -h host1 -U host1user host1dbname | psql -h host2 -U host2user host2dbna
 pg_dump -h host1 -U host1user -Ft host1dbname | pg_restore -h host2 -U host2user -d host2dbname
 ```
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### [심화] 대용량 DB 백업 & 병렬 덤프
 
@@ -118,7 +126,7 @@ pg_restore -j 2 -d dbname dumpfile
 - https://www.postgresql.org/docs/14/app-pg-dumpall.html
 - https://www.postgresql.org/docs/14/app-pgrestore.html
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### [실습] SQL Dump 백업 실습
 
@@ -158,6 +166,8 @@ psql -h localhost -U dvdadmin backupscript < dvdscriptdump
 pg_restore -h localhost -U dvdadmin -d backuptar dvdtardump.tar
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
+
 #### [추가 실습] 병렬모드 사용해보기
 
 1. DB 인스턴스 생성
@@ -195,7 +205,7 @@ systemctl stop postgresql-14
 tar -cf backup.tar /var/lib/pgsql/14/data # initdb 시 별도의 data 폴더 위치를 설정하지 않았을 경우에만 위치 해당.
 ```
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### 지속적인 아카이빙 & Point-in-Time Recovery (PITR)
 
@@ -234,7 +244,7 @@ archive_command = 'test ! -f /mnt/server/archivedir/%f && cp %p /mnt/server/arch
 archive_timeout = 60 #아카이빙 파일 교체 주기 설정 1 = 1s. 보통 60초로 설정하는 것이 안정적임.
 ```
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 **pg_basebackup을 활용한 기본 백업** 
 
@@ -279,7 +289,7 @@ SELECT * FROM pg_stop_backup(false, true);
 
 pg_stop_backup은 현재 활성화된 WAL 세그먼트까지 아카이브가 되고나면 종료처리되며, 마지막 WAL 세그먼트 이름을 리턴합니다.
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 **데이터 디렉토리 기반 백업**
 
@@ -302,7 +312,7 @@ data 디렉토리를 tar 파일 등으로 아카이브할 때 아래 파일들�
 - pg_dynshmem, pg_notify, pg_serial, pg_snapshots, pg_stat_tmpd, pg_subtrans 하위 파일 - 어차피 postgreSQL 재시작시 초기화됨. (선택)
 - pgsql_tmp* 형태의 디렉토리 (선택)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### WAL 기반 복구
 
@@ -337,7 +347,7 @@ data 디렉토리를 tar 파일 등으로 아카이브할 때 아래 파일들�
 9. 서버를 시작하면 복구 절차가 진행되며, 복구가 완료되면 recovery.signal 파일은 삭제됩니다.
 10. 정상 복구되었는지 확인 후 pg_hba.conf를 원상복구 하여 사용자가 연결할 수 있게 합니다.
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 **[심화] 특정 시점으로의 복구**
 
@@ -356,6 +366,8 @@ data 디렉토리를 tar 파일 등으로 아카이브할 때 아래 파일들�
   - pause(default) : 복구 일시 중지
   - promote : 복구 프로세스 완료 후 서버가 연결을 수락함
   - shutdown : 복구 대상 도달 후 서버를 중지. (recovery.signal 파일이 자동 삭제 되지 않아 수동 삭제 해줘야 함.) 
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### [실습] 지속적인 아카이빙 & PITR 실습
 
@@ -387,32 +399,29 @@ pg_basebackup -D /mnt/server/archivedir/backuptar -Ft -z -P
 아래와 같이 actor 테이블에 데이터를 넣어줍니다. 
 
 ```sql
-insert into actor (first_name, last_name, last_update) values ('Yeojeong', 'Yoon', now());
-insert into actor (first_name, last_name, last_update) values ('Hyesoo', 'Kim', now());
-insert into actor (first_name, last_name, last_update) values ('Taeri', 'Kim', now());
-insert into actor (first_name, last_name, last_update) values ('Seoyeon', 'Choi', now());
-insert into actor (first_name, last_name, last_update) values ('Jeongwon', 'Choi', now());
-insert into actor (first_name, last_name, last_update) values ('Sumi', 'Jeon', now());
-insert into actor (first_name, last_name, last_update) values ('Jeonghee', 'Lim', now());
-insert into actor (first_name, last_name, last_update) values ('Yeri', 'Han', now());
-insert into actor (first_name, last_name, last_update) values ('Jihye', 'Lee', now());
-insert into actor (first_name, last_name, last_update) values ('Joohyun', 'Ok', now());
-insert into actor (first_name, last_name, last_update) values ('Jiyeon', 'Park', now());
-insert into actor (first_name, last_name, last_update) values ('Sohee', 'Han', now());
-insert into actor (first_name, last_name, last_update) values ('Mido', 'Jeon', now());
-insert into actor (first_name, last_name, last_update) values ('Yejin', 'Son', now());
-insert into actor (first_name, last_name, last_update) values ('JeongAh', 'Yeom', now());
-insert into actor (first_name, last_name, last_update) values ('Dami', 'Kim', now());
-insert into actor (first_name, last_name, last_update) values ('Hyeyoon', 'Kim', now());
-insert into actor (first_name, last_name, last_update) values ('Sojin', 'Kim', now());
-insert into actor (first_name, last_name, last_update) values ('Hyeok', 'Kim', now());
-insert into actor (first_name, last_name, last_update) values ('Seyoung', 'Lee', now());
-insert into actor (first_name, last_name, last_update) values ('Jiyeong', 'Park', now());
-insert into actor (first_name, last_name, last_update) values ('Eunbin', 'Park', now());
-insert into actor (first_name, last_name, last_update) values ('Chaeyeon', 'Jeong', now());
-insert into actor (first_name, last_name, last_update) values ('Yoongyoung', 'Bae', now());
-insert into actor (first_name, last_name, last_update) values ('Hyunjoo', 'Paik', now());
+insert into actor (first_name, last_name) values ('Yeojeong', 'Yoon');
+insert into actor (first_name, last_name) values ('Hyesoo', 'Kim');
+insert into actor (first_name, last_name) values ('Taeri', 'Kim');
+insert into actor (first_name, last_name) values ('Seoyeon', 'Choi');
+insert into actor (first_name, last_name) values ('Jeongwon', 'Choi');
+insert into actor (first_name, last_name) values ('Sumi', 'Jeon');
+insert into actor (first_name, last_name) values ('Jeonghee', 'Lim');
+insert into actor (first_name, last_name) values ('Yeri', 'Han');
+insert into actor (first_name, last_name) values ('Jihye', 'Lee');
+insert into actor (first_name, last_name) values ('Joohyun', 'Ok');
+insert into actor (first_name, last_name) values ('Jiyeon', 'Park');
+insert into actor (first_name, last_name) values ('Sohee', 'Han');
+insert into actor (first_name, last_name) values ('Mido', 'Jeon');
+insert into actor (first_name, last_name) values ('Yejin', 'Son');
+insert into actor (first_name, last_name) values ('JeongAh', 'Yeom');
+insert into actor (first_name, last_name) values ('Dami', 'Kim');
+insert into actor (first_name, last_name) values ('Hyeyoon', 'Kim');
+insert into actor (first_name, last_name) values ('Sojin', 'Kim');
+insert into actor (first_name, last_name) values ('Hyeok', 'Kim');
+insert into actor (first_name, last_name) values ('Seyoung', 'Lee');
 ```
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 현재 타임스탬프를 확인하고, 기록해둡니다.
 
@@ -463,6 +472,8 @@ cp -r archive_status /var/lib/pgsql/14/data/pg_wal/
 .....
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
+
 recovery.signal 파일을 생성합니다.
 
 ```bash
@@ -487,7 +498,9 @@ journalctl -f
 
 ![journalctl](./images/journalctl.png)
 
-성공적으로 복구가 된 것을 확인하면 아래 쿼리를 통해 총 actor가 225개가 맞는지, 또 last_name이 Kim으로 변경되어있던게 원상복구된건지 확인합니다.
+<div style="page-break-after: always; break-after: page;"></div>
+
+성공적으로 복구가 된 것을 확인하면 아래 쿼리를 통해 총 actor가 220개가 맞는지, 또 last_name이 Kim으로 변경되어있던게 원상복구된건지 확인합니다.
 
 ```bash
 # postgres 계정
@@ -509,10 +522,6 @@ recovery.signal 파일이 자동 삭제 되었는지 확인해봅니다.
 cd /var/lib/pgsql/14/data/
 find recovery.signal
 ```
-
-
-
-
 
 
 

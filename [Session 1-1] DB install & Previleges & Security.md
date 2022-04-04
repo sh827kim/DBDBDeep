@@ -43,7 +43,7 @@ localectl set-locale LANG=en_US.UTF-8
 dnf install -y sudo net-tools wget unzip
 ```
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### DB 설치
 
@@ -104,7 +104,7 @@ systemctl start postgresql-14
 systemctl status postgresql-14
 ```
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### 초기 유저 셋업
 
@@ -156,34 +156,7 @@ services:
       - YOUR_ARCHIVE_DIR:/mnt/server/archivedir # 본인의 마운팅 위치를 YOUR_ARCHIVE_DIR에 작성해주세요.
 ```
 
-
-
-또는 아래와 같이 postgresql 도커 기반의 컴포즈 파일로 진행하는 방법도 있습니다.
-
-사전에 공유해드린  sql 파일을 init_schema 폴더에 추가하면 샘플스키마도 함께 create 되니 참조하시기 바랍니다.
-
-(link : https://github.com/sh827kim/DBDBDeep/tree/master/docker)
-
-단, 백업/복원 실습이 어려울 수 있으니 참조 바랍니다.
-
-```yaml
-version: '3.1'
-services:
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
-    ports:
-      - "25432:5432"
-    volumes:
-      - YOUR_DATA_DIR:/var/lib/postgresql/data
-      - YOUR_MOUNT_BASE_DIR/init_schema:/docker-entrypoint-initdb.d
-    environment:
-      POSTGRES_PASSWORD: mytest1234
-      POSTGRES_DB: dvdrental
-```
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## 권한
 
@@ -211,6 +184,8 @@ CREATE ROLE spark LOGIN; # USER 취급
 DROP ROLE #{NAME};
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
+
 CREATE 구문을 통해 부여할 수 있는 속성은 아래와 같습니다.
 
 | 구분                                   | 설명                                                         | ALTER |
@@ -229,9 +204,7 @@ CREATE 구문을 통해 부여할 수 있는 속성은 아래와 같습니다.
 | `ROLE` 'role_name'                     | 새로 생성하는 role에 포함시킬 role들을 나열. <br>`CREATE ROLE crew ROLE spark, jason;` | X     |
 | `ADMIN` 'role_name'                    | `ROLE` 구문과 거의 동일하나, `WITH ADMIN OPTION`을 추가한 효과.<br>(다른 role에 이 role을 부여할 수 있는 자격이 함께 생김) | X     |
 
-
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### 권한 - GRANT/REVOKE
 
@@ -259,10 +232,10 @@ REVOKE *privilege* ON *Object* FROM *role*;
 | `CONNECT`        | DATABASE 에 연결할 수 있는 권한을 부여                       |
 | `TEMPORARY`      | DATABASE를 사용하는 동안 임시 테이블을 생성할 수 있는 권한   |
 | `EXECUTE`        | FUNCTION, PROCEDURE 를 호출할 수 있는 권한                   |
-| `USAGE`          | For Procedural Language : Function을 만들기 위해 사용되는 특정 language에 대한 사용 권한 <br>For Schema : 스키마 안의 object 사용 권한 (최초 catalog 정보만 확인 가능)<br>For Sequence : currval 와 nextval 함수를 사용하기 위한 권한<br>For Type and domain : 테이블, 함수 등의 Object 생성 시 type과 domain에 대한 사용권한<br> |
+| `USAGE`          | For Procedural Language : Function을 만들기 위해 사용되는 특정 language에 대한 사용 권한 <br>For Schema : 스키마 안의 object 사용 권한 (최초 catalog 정보만 확인 가능)<br>For Sequence : currval 와 nextval 함수를 사용하기 위한 권한<br>For Type and domain : 테이블, 함수 등의 Object 생성 시 type과 domain에 대한 사용권한 |
 | `ALL PRIVILEGES` | 모든 권한 부여                                               |
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### [실습 사전 작업] 샘플 스키마 생성
 
@@ -295,6 +268,8 @@ postgres=# \q
 ```bash
 pg_restore -h localhost -p 5432 -U postgres -d dvdrental -v "./dvdrental.tar"
 ```
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### [실습] 여러가지 역할 생성, 권한부여
 
@@ -334,9 +309,7 @@ REVOKE DELETE ON actor from dvddev;
 DELETE FROM actor where actor_id = 1;
 ```
 
-
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## DB 보안
 
@@ -375,7 +348,7 @@ DB 보안은 굉장히 광범위해질 수 있는 내용입니다. 따라서 본
   - 데이터 무결성 != DB에서의 참조 무결성 (RDB 관계모델에서 2개의 관련 있던 관계 변수(테이블) 간의 일관성)
 - 가용성 : 정당한 권한을 가진 사용자나 애플리케이션에 대해 원하는 데이터에 대한 원활한 접근을 제공하는 서비스를 지속할 수 있도록 보장하는 것
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### DB 보안 위협 요소
 
@@ -406,7 +379,7 @@ DB 보안은 굉장히 광범위해질 수 있는 내용입니다. 따라서 본
 - 프로젝트 수행과정에서의 부득이한 DB 접근 허용
 - 운영과정에서의 권한관리 소홀
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### DB 보안 범위
 
@@ -423,8 +396,6 @@ DB 보안은 굉장히 광범위해질 수 있는 내용입니다. 따라서 본
 - 심층 방어 : 겹겹이 보안 수단을 중첩하여 구성하는 것을 말함. 
   - 네트워크 보안 - 서버 보안 - 어플리케이션 보안 - DB 보안 
 
-
-
 **DB 보안 요구사항**
 
 - 정당한 사용자의 데이터 접근 보장
@@ -438,8 +409,6 @@ DB 보안은 굉장히 광범위해질 수 있는 내용입니다. 따라서 본
 - 다단계 보호 : 보호 요구사항의 집합을 의미함.
 
 이 요구사항을 하나하나 다 어떻게 보장을 할까? 
-
-
 
 ### DB 보안 프레임워크
 
